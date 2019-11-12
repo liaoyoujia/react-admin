@@ -1,90 +1,64 @@
 import React, { Component } from 'react'
-import './index.css'
-import logo from '../assert/imgs/logo.png'
-import { Row, Col, Input, Tabs } from 'antd'
-const { Search } = Input
-const { TabPane } = Tabs
-export default class Layout extends Component {
+import './index.less'
+import { connect } from 'react-redux'
+import { Layout } from 'antd'
+import { Route, Switch, Redirect } from 'react-router-dom'
+import LeftNav from './compoents/left-nav.jsx'
+import Header from './compoents/header.jsx'
+import Home from '../views/home/index.jsx'
+import Category from '../views/category/index.jsx'
+import Order from '../views/order/index.jsx'
+import Product from '../views/poroduct/index.jsx'
+import Role from '../views/role/index.jsx'
+import User from '../views/user/index.jsx'
+import ChartLine from '../views/chart/line.jsx'
+import ChartBar from '../views/chart/bar.jsx'
+import ChartPie from '../views/chart/pie.jsx'
+
+const { Footer, Sider, Content } = Layout
+
+class Main extends Component {
   render() {
+    let { user } = this.props
+    if (!user || !user._id) {
+      return <Redirect to="/login"></Redirect>
+    }
     return (
-      <div className="main">
-        <Row className="header-top"></Row>
-        <Row>
-          <Col span={16} offset={4}>
-            <Header></Header>
-          </Col>
-        </Row>
-        <Row className="header-tab">
-          <Col span={16} offset={4}>
-            <Tab></Tab>
-          </Col>
-        </Row>
-      </div>
+      <Layout className="main">
+        <Sider className="main-left">
+          <LeftNav></LeftNav>
+        </Sider>
+        <Layout className="main-cont">
+          <Header></Header>
+          <Content style={{ boxSizing: 'border-box', padding: '24px' }}>
+            <Switch>
+              <Redirect exact from="/" to="/home" />
+              <Route path="/home" component={Home}></Route>
+              <Route path="/category" component={Category}></Route>
+              <Route path="/product" component={Product}></Route>
+              <Route path="/user" component={User}></Route>
+              <Route path="/role" component={Role}></Route>
+              <Route path="/order" component={Order}></Route>
+              <Route path="/charts/pie" component={ChartPie}></Route>
+              <Route path="/charts/bar" component={ChartBar}></Route>
+              <Route path="/charts/line" component={ChartLine}></Route>
+            </Switch>
+          </Content>
+          <Footer
+            style={{
+              textAlign: 'center',
+              padding: '30px 0 20px',
+              boxSizing: 'border-box'
+            }}
+          >
+            推荐使用谷歌浏览器，体验更好，开发者liaoyoujia!
+          </Footer>
+        </Layout>
+      </Layout>
     )
   }
 }
-
-const Header = function() {
-  return (
-    <div
-      style={{
-        width: '100%',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        boxSizing: 'border-box',
-        padding: '20px 0'
-      }}
-    >
-      <img
-        src={logo}
-        alt=""
-        style={{ display: 'block', width: '175px', height: '60px' }}
-      />
-      <Search
-        placeholder="搜索书名或作者"
-        style={{ width: '280px' }}
-        onSearch={value => console.log(value)}
-        enterButton
-      />
-    </div>
-  )
-}
-
-const Tab = function() {
-  return (
-    <div style={{ width: '100%' }}>
-      <Tabs type="card">
-        <TabPane tab="首页" key="1">
-          <p>Content of Tab Pane 1</p>
-          <p>Content of Tab Pane 1</p>
-          <p>Content of Tab Pane 1</p>
-        </TabPane>
-        <TabPane tab="精选" key="2">
-          <p>Content of Tab Pane 2</p>
-          <p>Content of Tab Pane 2</p>
-          <p>Content of Tab Pane 2</p>
-        </TabPane>
-        <TabPane tab="分类" key="3">
-          <p>Content of Tab Pane 3</p>
-          <p>Content of Tab Pane 3</p>
-          <p>Content of Tab Pane 3</p>
-        </TabPane>
-        <TabPane tab="排行榜" key="4">
-          <p>Content of Tab Pane 3</p>
-          <p>Content of Tab Pane 3</p>
-          <p>Content of Tab Pane 3</p>
-        </TabPane>
-        <TabPane tab="客户端" key="5">
-          <p>Content of Tab Pane 3</p>
-          <p>Content of Tab Pane 3</p>
-          <p>Content of Tab Pane 3</p>
-        </TabPane>
-      </Tabs>
-    </div>
-  )
-}
-
-const Footer = function() {
-  return <div style={{ width: '100%' }}></div>
-}
+export default connect(
+  state => ({ user: state.user }),
+  null
+)(Main)

@@ -1,0 +1,3 @@
+export const SET_HEADER_TITLE = 'set_header_title'
+export const SET_USER = 'set_user'
+export const REST_USER = 'rest_user'

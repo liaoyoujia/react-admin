@@ -1,12 +1,13 @@
 import React, { Component } from 'react'
-import { Card, Button, Icon, Table, Message, Select, Input } from 'antd'
+import { Card, Button, Icon, Table, Message, Modal } from 'antd'
 import LinkButton from '../../components/linkButton/index.jsx'
+import AddForm from './components/add_form/index.jsx'
+import UpdateForm from './components/update_form/index.jsx'
 import {
   reqCatoryLits,
   reqAddCategory,
   reqUpdateCategory
 } from '../../http/index'
-const { Option } = Select
 export default class Category extends Component {
   state = {
     columnData: [], //一级列表
@@ -18,36 +19,35 @@ export default class Category extends Component {
   initColumnData = () => {
     this.columns = [
       {
-        width: '35%',
-        title: '商品名称',
+        width: '80%',
+        title: '分类的名称',
         dataIndex: 'name'
       },
       {
-        width: '35%',
-        title: '商品描述',
-        dataIndex: 'desc'
-      },
-      {
         width: '20%',
-        title: '商品价格',
-        dataIndex: 'price'
-      },
-      {
-        width: '5%',
-        title: '状态',
-        render() {
+        title: '操纵',
+        render: categroy => {
           return (
             <span>
-              <Button type="primary">下载</Button>
-              <div>在售</div>
+              <LinkButton
+                onClick={() => {
+                  this.showUpdateCategroy(categroy)
+                }}
+              >
+                修改分类
+              </LinkButton>
+              {this.state.parentId === '0' ? (
+                <LinkButton
+                  onClick={() => {
+                    this.showSubCategory(categroy)
+                  }}
+                >
+                  查看子分类
+                </LinkButton>
+              ) : null}
             </span>
           )
         }
-      },
-      {
-        width: '5%',
-        title: '操作',
-        render() {}
       }
     ]
   }
@@ -150,25 +150,29 @@ export default class Category extends Component {
     this.loadCatoryList()
   }
   render() {
-    const { columnData, parentId, subCategoryData } = this.state
+    const {
+      columnData,
+      categroyVisible,
+      parentId,
+      subCategoryData
+    } = this.state
+    const categroy = this.categroy || {}
     const extra = (
-      <Button type="primary" icon="plus">
-        添加商品
+      <Button type="primary" onClick={this.showAdd}>
+        <Icon type="plus" />
+        添加
       </Button>
     )
-    const title = (
-      <span>
-        <Select defaultValue="jack" style={{ width: 140 }}>
-          <Option value="jack">按名称搜索</Option>
-          <Option value="lucy">按描述搜索</Option>
-        </Select>
-        <Input
-          placeholder="关键字"
-          style={{ width: 140, margin: '0 14px' }}
-        ></Input>
-        <Button type="primary">搜索</Button>
-      </span>
-    )
+    const title =
+      parentId === '0' ? (
+        '一级分类列表'
+      ) : (
+        <span>
+          <LinkButton onClick={this.showCategroys}>一级分类列表</LinkButton>
+          <Icon type="arrow-right" style={{ margin: '0 6px' }} />
+          <span>二级分类列表</span>
+        </span>
+      )
     return (
       <div>
         <Card title={title} extra={extra} style={{ width: '100%' }}>
@@ -178,6 +182,33 @@ export default class Category extends Component {
             pagination={{ defaultPageSize: 5 }}
             bordered
           />
+          <Modal
+            title="添加分类"
+            visible={categroyVisible === 1 ? true : false}
+            onOk={this.handleAddCategory}
+            onCancel={() => this.setState({ categroyVisible: 0 })}
+          >
+            <AddForm
+              columnData={columnData}
+              parentId={parentId}
+              setForm={form => {
+                this.form = form
+              }}
+            ></AddForm>
+          </Modal>
+          <Modal
+            title="更新分类"
+            visible={categroyVisible === 2 ? true : false}
+            onOk={this.handleUpCategory}
+            onCancel={() => this.setState({ categroyVisible: 0 })}
+          >
+            <UpdateForm
+              categroyName={categroy.name}
+              setForm={form => {
+                this.form = form
+              }}
+            ></UpdateForm>
+          </Modal>
         </Card>
       </div>
     )

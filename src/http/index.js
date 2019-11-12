@@ -1,39 +1,17 @@
-import axios from 'axios'
-import { message } from 'antd'
-import qs from 'qs'
+import http from './main'
+// 登录接口
+export const login = data => http({ url: '/login', method: 'POST', data })
+// 请求品类一二级列表
+export const reqCatoryLits = parentId => http({ url: '/manage/category/list', params: { parentId } })
 
-const http = axios.create({
-  baseURL: '',
-  timeout: 5000,
-  transformRequest: [
-    function(data) {
-      data = qs.stringify(data)
-      return data
-    }
-  ]
-})
+// 添加分类
+export const reqAddCategory = data => http({ url: '/manage/category/add', method: 'POST', data })
+// export const reqAddCategory = (categoryName, parentId) => ajax(BASE + '', { categoryName, parentId }, 'POST')
 
-http.interceptors.request.use(
-  config => {
-    message.loading('网络请求中')
-    return config
-  },
-  error => {
-    message.destroy()
-    return Promise.reject(error)
-  }
-)
+// 更新分类
+export const reqUpdateCategory = data => http({ url: '/manage/category/update', method: 'POST', data })
+// export const reqUpdateCategory = ({ categoryId, categoryName }) => ajax(BASE + '/manage/category/update', { categoryId, categoryName }, 'POST')
 
-http.interceptors.response.use(
-  response => {
-    message.destroy()
-    return response
-  },
-  error => {
-    message.info('network request error:' + error)
-    message.destroy()
-    return Promise.reject(error)
-  }
-)
-
-export default http
+// 获取一个分类
+export const reqCategory = categoryId => http({ url: '/manage/category/info', params: { categoryId } })
+// export const reqCategory = (categoryId) => ajax(BASE + '/manage/category/info', { categoryId })

@@ -1,41 +1,67 @@
 const menuList = [
   {
-    title: '首页',
-    key: '/home',
-    icon: 'home',
-    role: [0, 1]
+    title: '首页', // 菜单标题名称
+    key: '/home', // 对应的path
+    icon: 'home', // 图标名称
+    isPublic: true, // 公开的
   },
   {
-    title: '商品管理',
-    key: '/product',
-    icon: 'shop',
-    role: [0, 1],
-    children: [
-      {
-        title: '商品管理',
-        key: '/product/index',
-        icon: 'shop',
-        role: [0, 1]
-      },
+    title: '商品',
+    key: '/products',
+    icon: 'appstore',
+    children: [ // 子菜单列表
       {
         title: '品类管理',
-        key: '/product/category/index',
-        icon: 'tags',
-        role: [0, 1]
-      }
+        key: '/category',
+        icon: 'bars'
+      },
+      {
+        title: '商品管理',
+        key: '/product',
+        icon: 'tool'
+      },
     ]
   },
-  {
-    title: '订单管理',
-    key: '/order/list',
-    icon: 'ordered-list',
-    role: [1]
-  },
+
   {
     title: '用户管理',
     key: '/user',
-    icon: 'user',
-    role: [1] // role 模拟 0 非管理员， 1 管理员
-  }
+    icon: 'user'
+  },
+  {
+    title: '角色管理',
+    key: '/role',
+    icon: 'safety',
+  },
+
+  {
+    title: '图形图表',
+    key: '/charts',
+    icon: 'area-chart',
+    children: [
+      {
+        title: '柱形图',
+        key: '/charts/bar',
+        icon: 'bar-chart'
+      },
+      {
+        title: '折线图',
+        key: '/charts/line',
+        icon: 'line-chart'
+      },
+      {
+        title: '饼图',
+        key: '/charts/pie',
+        icon: 'pie-chart'
+      },
+    ]
+  },
+
+  {
+    title: '订单管理',
+    key: '/order',
+    icon: 'windows',
+  },
 ]
+
 export default menuList
