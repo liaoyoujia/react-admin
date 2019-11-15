@@ -22,6 +22,16 @@ export const reqUpdateStatus = (productId, status) => http({ url: '/manage/produ
 // 删除指定名称的图片
 export const reqDeleteImg = (name) => http({ url: '/manage/img/delete', method: 'POST', data: { name } })
 
+//添加修改商品
+export const reqAddOrUpdateProduct = (data) => http({ url: '/manage/product/' + (data._id ? 'update' : 'add'), method: 'POST', data })
+
+
+// 添加/修改商品
+// export const reqAddOrUpdateProduct = (product) => ajax(BASE + '/manage/product/' + (product._id ? 'update' : 'add'), product, 'POST')
+// 修改商品
+// export const reqUpdateProduct = (product) => ajax(BASE + '/manage/product/update', product, 'POST')
+
+
 // 获取商品分页列表
 // export const reqProducts = (pageNum, pageSize) => ajax(BASE + '/manage/product/list', { pageNum, pageSize })
 
