@@ -68,7 +68,13 @@ export default class Category extends Component {
               >
                 详情
               </LinkButton>
-              <LinkButton>修改</LinkButton>
+              <LinkButton
+                onClick={() =>
+                  this.props.history.push('/product/editor', product)
+                }
+              >
+                修改
+              </LinkButton>
             </span>
           )
         }

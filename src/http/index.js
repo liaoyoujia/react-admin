@@ -27,3 +27,12 @@ export const reqAddOrUpdateProduct = (data) => http({ url: '/manage/product/' + 
 
 // 搜索商品
 export const reqSearchProduct = (pageNum, searchName, searchType, pageSize) => http({ url: '/manage/product/search', params: { pageNum, pageSize, [searchType]: searchName } })
+
+
+export const reqRoles = () => http({ url: '/manage/role/list' })
+export const reqAddRole = (roleName) => http({ url: '/manage/role/add', method: 'POST', data: { roleName } })
+export const reqUpdateRole = (role) => http({ url: '/manage/role/update', method: 'POST', data: { role } })
+
+export const reqUsers = () => http({ url: '/manage/user/list' })
+export const reqDeleteUser = (userId) => http({ url: '/manage/user/delete', method: 'POST', data: { userId } })
+export const reqAddOrUpdateUser = (user) => http({ url: '/manage/user/' + (user._id ? 'update' : 'add'), method: 'POST', data: user })

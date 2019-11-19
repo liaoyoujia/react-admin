@@ -1,69 +1,83 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { reqDeleteImg } from "../../../../http/index.js";
-import { Upload, Icon, Modal, message } from "antd";
+import React from 'react'
+import PropTypes from 'prop-types'
+import { reqDeleteImg } from '../../../../http/index.js'
+import { Upload, Icon, Modal, message } from 'antd'
+import { BASE_URL } from '../../../../config/constants'
 
 function getBase64(file) {
   return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = error => reject(error);
-  });
+    const reader = new FileReader()
+    reader.readAsDataURL(file)
+    reader.onload = () => resolve(reader.result)
+    reader.onerror = error => reject(error)
+  })
 }
 
 export default class PicturesWall extends React.Component {
-  state = {
-    previewVisible: false,
-    previewImage: "",
-    fileList: []
-  };
-
-  handleCancel = () => this.setState({ previewVisible: false });
-  getImgs = () => this.state.fileList.map(item => item.name);
+  static propTypes = {
+    imgs: PropTypes.array
+  }
+  constructor(props) {
+    super(props)
+    let fileList = []
+    const { imgs } = this.props
+    if (imgs && imgs.length) {
+      fileList = imgs.map((img, index) => ({
+        uid: -index, // 每个file都有自己唯一的id
+        name: img, // 图片文件名
+        status: 'done', // 图片状态: done-已上传, uploading: 正在上传中, removed: 已删除
+        url: BASE_URL + img
+      }))
+    }
+    this.state = {
+      previewVisible: false,
+      previewImage: '',
+      fileList
+    }
+  }
+  handleCancel = () => this.setState({ previewVisible: false })
+  getImgs = () => this.state.fileList.map(item => item.name)
   handlePreview = async file => {
     if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj);
+      file.preview = await getBase64(file.originFileObj)
     }
 
     this.setState({
       previewImage: file.url || file.preview,
       previewVisible: true
-    });
-  };
-
+    })
+  }
   handleChange = async ({ file, fileList }) => {
-    if (file.status === "done") {
-      const result = file.response;
+    if (file.status === 'done') {
+      const result = file.response
       if (result.status === 0) {
-        message.success("上传图片成功!");
-        const { name, url } = result.data;
-        file = fileList[fileList.length - 1];
-        file.name = name;
-        file.url = url;
+        message.success('上传图片成功!')
+        const { name, url } = result.data
+        file = fileList[fileList.length - 1]
+        file.name = name
+        file.url = url
       } else {
-        message.error("上传图片失败");
+        message.error('上传图片失败')
       }
-    } else if (file.status === "removed") {
+    } else if (file.status === 'removed') {
       // 删除图片
-      const result = await reqDeleteImg(file.name);
+      const result = await reqDeleteImg(file.name)
       if (result.status === 0) {
-        message.success("删除图片成功!");
+        message.success('删除图片成功!')
       } else {
-        message.error("删除图片失败!");
+        message.error('删除图片失败!')
       }
     }
-    this.setState({ fileList });
-  };
-
+    this.setState({ fileList })
+  }
   render() {
-    const { previewVisible, previewImage, fileList } = this.state;
+    const { previewVisible, previewImage, fileList } = this.state
     const uploadButton = (
       <div>
         <Icon type="plus" />
         <div className="ant-upload-text">Upload</div>
       </div>
-    );
+    )
     return (
       <div className="clearfix">
         <Upload
@@ -82,9 +96,9 @@ export default class PicturesWall extends React.Component {
           footer={null}
           onCancel={this.handleCancel}
         >
-          <img alt="example" style={{ width: "100%" }} src={previewImage} />
+          <img alt="example" style={{ width: '100%' }} src={previewImage} />
         </Modal>
       </div>
-    );
+    )
   }
 }

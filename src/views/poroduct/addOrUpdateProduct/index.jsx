@@ -85,34 +85,59 @@ class Index extends Component {
           imgs,
           detail
         }
+        if (this.update) {
+          product._id = this.product._id
+        }
         const res = await reqAddOrUpdateProduct(product)
-        console.log(res, 111111111111111)
         if (res.status === 0) {
-          Message.success('商品添加成功！')
-          console.log(this.props.history, 123333333)
+          Message.success(`商品${this.update ? '修改' : '添加'}成功！`)
           this.props.history.goBack()
         } else {
-          Message.error('商品添加成功！')
+          Message.error(`商品${this.update ? '修改' : '添加'}失败！`)
         }
       }
     })
+  }
+  componentWillMount() {
+    const product = this.props.location.state
+    console.log(product, 222222)
+    this.update = !!product
+    this.product = product || {}
   }
   componentDidMount() {
     this.loadCategory()
   }
   render() {
+    const {
+      name,
+      price,
+      desc,
+      imgs,
+      detail,
+      pCategoryId,
+      categoryId
+    } = this.product
     const formItemLayout = {
       labelCol: { span: 2 },
       wrapperCol: { span: 8 }
+    }
+    const categoryIds = []
+    if (this.update) {
+      if (pCategoryId === '0') {
+        categoryIds.push(categoryId)
+      } else {
+        categoryIds.push(pCategoryId)
+        categoryIds.push(categoryId)
+      }
     }
     const { options } = this.state
     const { getFieldDecorator } = this.props.form
     const title = (
       <span>
-        <LinkButton>
+        <LinkButton onClick={() => this.props.history.goBack()}>
           <Icon type="arrow-left" style={{ fontSize: 20 }}></Icon>
         </LinkButton>
-        <span>添加商品</span>
+        <span>{this.update ? '修改商品' : '添加商品'}</span>
       </span>
     )
     return (
@@ -124,16 +149,19 @@ class Index extends Component {
         >
           <Form.Item label="商品名称">
             {getFieldDecorator('name', {
+              initialValue: name,
               rules: [{ required: true, message: '请输入商品名称!' }]
             })(<Input placeholder="请输入商品名称!" />)}
           </Form.Item>
           <Form.Item label="商品描述">
             {getFieldDecorator('desc', {
+              initialValue: desc,
               rules: [{ required: true, message: '请输入商品描述!' }]
             })(<TextArea placeholder="请输入商品描述!" />)}
           </Form.Item>
           <Form.Item label="商品价格">
             {getFieldDecorator('price', {
+              initialValue: price,
               rules: [
                 { required: true, message: '请输入商品价格!' },
                 { validator: this.validatePrice }
@@ -148,6 +176,7 @@ class Index extends Component {
           </Form.Item>
           <Form.Item label="商品分类">
             {getFieldDecorator('categoryIds', {
+              initialValue: categoryIds,
               rules: [{ required: true, message: '必须输入商品价格' }]
             })(
               <Cascader
@@ -158,14 +187,14 @@ class Index extends Component {
             )}
           </Form.Item>
           <Form.Item label="商品图片">
-            <UploadImg ref={this.uploadImg}></UploadImg>
+            <UploadImg ref={this.uploadImg} imgs={imgs}></UploadImg>
           </Form.Item>
           <Form.Item
             label="商品详情"
             labelCol={{ span: 2 }}
             wrapperCol={{ span: 16 }}
           >
-            <Editor ref={this.editor}></Editor>
+            <Editor ref={this.editor} detail={detail}></Editor>
           </Form.Item>
           <Form.Item>
             <Button type="primary" onClick={this.submit}>
