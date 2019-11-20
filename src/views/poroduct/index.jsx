@@ -13,6 +13,7 @@ export default class index extends Component {
         <Route path="/product/add" component={AddPrduct}></Route>
         <Route path="/product/editor" component={UpdatePrduct}></Route>
         <Route path="/product/detail" component={DetailPrduct}></Route>
+        <Redirect to="/product"></Redirect>
       </Switch>
     )
   }

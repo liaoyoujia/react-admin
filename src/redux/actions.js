@@ -12,7 +12,6 @@ export const setUserInfor = (user) => ({ type: SET_USER, data: user })
 
 // 退出 重置用户
 export const resetUserInfor = () => {
-  console.log(1231231231)
   removeStore('user')
   return { type: REST_USER }
 }

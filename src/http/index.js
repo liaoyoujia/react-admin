@@ -30,8 +30,8 @@ export const reqSearchProduct = (pageNum, searchName, searchType, pageSize) => h
 
 
 export const reqRoles = () => http({ url: '/manage/role/list' })
-export const reqAddRole = (roleName) => http({ url: '/manage/role/add', method: 'POST', data: { roleName } })
-export const reqUpdateRole = (role) => http({ url: '/manage/role/update', method: 'POST', data: { role } })
+export const reqAddRole = (data) => http({ url: '/manage/role/add', method: 'POST', data })
+export const reqUpdateRole = (data) => http({ url: '/manage/role/update', method: 'POST', data })
 
 export const reqUsers = () => http({ url: '/manage/user/list' })
 export const reqDeleteUser = (userId) => http({ url: '/manage/user/delete', method: 'POST', data: { userId } })
