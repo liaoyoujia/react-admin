@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Card, Icon, Statistic, DatePicker } from 'antd'
+import { Card, Icon, Statistic, DatePicker, Timeline } from 'antd'
 import moment from 'moment'
 import Line from './compoents/line.jsx'
 import Bar from './compoents/bar.jsx'
@@ -95,11 +95,30 @@ export default class Home extends Component {
         </div>
         <Card title={title} extra={extra}>
           <Card
-            style={{ width: '60%' }}
+            style={{ width: '68%', float: 'left' }}
             title={isVisted ? '访问量' : '销售量'}
             extra={<Icon type="reload" />}
           >
             <Bar></Bar>
+          </Card>
+          <Card
+            style={{ width: '18%', float: 'right' }}
+            title="任务"
+            extra={<Icon type="reload" />}
+          >
+            <Timeline>
+              <Timeline.Item color="green">新版本迭代会</Timeline.Item>
+              <Timeline.Item color="green">完成网站设计初版</Timeline.Item>
+              <Timeline.Item color="red">
+                <p>联调接口</p>
+                <p>功能验收</p>
+              </Timeline.Item>
+              <Timeline.Item color="green">
+                <p>登录功能设计</p>
+                <p>权限验证</p>
+                <p>页面排版</p>
+              </Timeline.Item>
+            </Timeline>
           </Card>
         </Card>
       </div>

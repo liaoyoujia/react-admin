@@ -44,7 +44,7 @@ export default class Bar extends Component {
     return (
       <ReactEcharts
         option={this.getOption()}
-        style={{ width: '70%', height: 500 }}
+        style={{ width: '100%', height: 500 }}
       ></ReactEcharts>
     )
   }

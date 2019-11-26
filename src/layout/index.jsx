@@ -14,6 +14,7 @@ import User from '../views/user/index.jsx'
 import ChartLine from '../views/chart/line.jsx'
 import ChartBar from '../views/chart/bar.jsx'
 import ChartPie from '../views/chart/pie.jsx'
+import NotFound from '../views/noFound/index.jsx'
 
 const { Footer, Sider, Content } = Layout
 
@@ -42,6 +43,7 @@ class Main extends Component {
               <Route path="/charts/pie" component={ChartPie}></Route>
               <Route path="/charts/bar" component={ChartBar}></Route>
               <Route path="/charts/line" component={ChartLine}></Route>
+              <Redirect component={NotFound}></Redirect>
             </Switch>
           </Content>
           <Footer
@@ -58,7 +60,4 @@ class Main extends Component {
     )
   }
 }
-export default connect(
-  state => ({ user: state.user }),
-  null
-)(Main)
+export default connect(state => ({ user: state.user }), null)(Main)
